@@ -29,7 +29,6 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Application app = new Application(
-                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -37,7 +36,9 @@ public class ApplicationDAO extends DBContext {
                         rs.getString("status"),
                         rs.getInt("created_by"),
                         rs.getInt("processed_by"),
-                        rs.getString("note"));
+                        rs.getString("note"),
+                        rs.getInt("leave_on_person")
+                );
                 list.add(app);
             }
         } catch (SQLException e) {
@@ -54,7 +55,6 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new Application(
-                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -62,7 +62,9 @@ public class ApplicationDAO extends DBContext {
                         rs.getString("status"),
                         rs.getInt("created_by"),
                         rs.getInt("processed_by"),
-                        rs.getString("note"));
+                        rs.getString("note"),
+                        rs.getInt("leave_on_person")
+                );
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -71,8 +73,8 @@ public class ApplicationDAO extends DBContext {
     }
 
     public Application insert(Application app) {
-        String sql = "INSERT INTO Application (title, start_date, end_date, reason, status, created_by) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Application (title, start_date, end_date, reason, status, created_by,leave_on_person) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, app.getTitle());
@@ -81,6 +83,7 @@ public class ApplicationDAO extends DBContext {
             st.setString(4, app.getReason());
             st.setString(5, app.getStatus());
             st.setInt(6, app.getCreatedBy());
+            st.setInt(7, app.getLeaveOnPerson());
             st.executeUpdate();
 
             // Get the generated application_id
@@ -97,7 +100,7 @@ public class ApplicationDAO extends DBContext {
 
     public void update(Application app) {
         String sql = "UPDATE Application SET title = ?, start_date = ?, end_date = ?, reason = ?, status = ?, "
-                + "created_by = ?, processed_by = ?, note = ? WHERE application_id = ?";
+                + "created_by = ?, processed_by = ?, note = ? , leave_on_person  = ?  WHERE application_id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, app.getTitle());
@@ -108,7 +111,8 @@ public class ApplicationDAO extends DBContext {
             st.setInt(6, app.getCreatedBy());
             st.setInt(7, app.getProcessedBy());
             st.setString(8, app.getNote());
-            st.setInt(9, app.getApplicationId());
+            st.setInt(9, app.getLeaveOnPerson());
+            st.setInt(10, app.getApplicationId());
             st.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -134,7 +138,6 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Application app = new Application(
-                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -142,7 +145,9 @@ public class ApplicationDAO extends DBContext {
                         rs.getString("status"),
                         rs.getInt("created_by"),
                         rs.getInt("processed_by"),
-                        rs.getString("note"));
+                        rs.getString("note"),
+                        rs.getInt("leave_on_person")
+                );
                 list.add(app);
             }
         } catch (SQLException e) {
@@ -162,7 +167,6 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Application app = new Application(
-                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -170,7 +174,9 @@ public class ApplicationDAO extends DBContext {
                         rs.getString("status"),
                         rs.getInt("created_by"),
                         rs.getInt("processed_by"),
-                        rs.getString("note"));
+                        rs.getString("note"),
+                        rs.getInt("leave_on_person")
+                );
                 list.add(app);
             }
         } catch (SQLException e) {
@@ -200,7 +206,6 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Application app = new Application(
-                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -208,7 +213,9 @@ public class ApplicationDAO extends DBContext {
                         rs.getString("status"),
                         rs.getInt("created_by"),
                         rs.getInt("processed_by"),
-                        rs.getString("note"));
+                        rs.getString("note"),
+                        rs.getInt("leave_on_person")
+                );
                 list.add(app);
             }
         } catch (SQLException e) {
@@ -245,7 +252,7 @@ public class ApplicationDAO extends DBContext {
 
     public HashMap<Integer, List<Date>> absentDates(Employee employee) {
         HashMap<Integer, List<Date>> absentMap = new HashMap<>();
-        String sql = "SELECT created_by, start_date, end_date FROM Application WHERE status = 'Approved'";
+        String sql = "SELECT leave_on_person, start_date, end_date FROM Application WHERE status = 'Approved'";
         if (employee.getRoleId() != 1) {
             sql += "AND created_by IN (\n"
                     + "                                                SELECT e.employee_id \n"
@@ -268,7 +275,7 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                int employeeId = rs.getInt("created_by");
+                int employeeId = rs.getInt("leave_on_person");
                 Date startDate = rs.getDate("start_date");
                 Date endDate = rs.getDate("end_date");
 
@@ -295,17 +302,13 @@ public class ApplicationDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        ApplicationDAO dao = new ApplicationDAO();
+        ApplicationDAO adao = new ApplicationDAO();
         EmployeeDAO edao = new EmployeeDAO();
-        HashMap<Integer, List<Date>> abMap = dao.absentDates(edao.getByEmployeeId(2));
-
-        Set<Integer> ids = abMap.keySet();
-        for (Integer id : ids) {
-            List<Date> dates = abMap.get(id);
-            for (Date date : dates) {
-                System.out.println(date);
-            }
+       
+        List<Application> applications = adao.getAll();
+        for (Application application : applications) {
+            System.out.println(application);
         }
-  
+
     }
 }

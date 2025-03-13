@@ -12,7 +12,6 @@ import java.sql.Date;
  *
  * @author Vu Thi Huong Giang
  */
-
 public class Application {
 
     private int applicationId;
@@ -24,12 +23,13 @@ public class Application {
     private int createdBy;
     private Integer processedBy;
     private String note;
+    private int leaveOnPerson;
+
     private String createdByName;
     private String processedByName;
     private String createByRole;
 
-    public Application(int applicationId, String title, Date startDate, Date endDate, String reason, String status, int createdBy, Integer processedBy, String note) {
-        this.applicationId = applicationId;
+    public Application( String title, Date startDate, Date endDate, String reason, String status, int createdBy, Integer processedBy, String note, int leaveOnPerson) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -38,8 +38,10 @@ public class Application {
         this.createdBy = createdBy;
         this.processedBy = processedBy;
         this.note = note;
+        this.leaveOnPerson = leaveOnPerson;
     }
 
+    
     public Application() {
     }
 
@@ -139,13 +141,21 @@ public class Application {
         this.createByRole = createByRole;
     }
 
-    @Override
-    public String toString() {
-        return "Application{" + "applicationId=" + applicationId + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate + ", reason=" + reason + ", status=" + status + ", createdBy=" + createdBy + ", processedBy=" + processedBy + ", note=" + note + ", createdByName=" + createdByName + ", processedByName=" + processedByName + ", createByRole=" + createByRole + '}';
+    public int getLeaveOnPerson() {
+        return leaveOnPerson;
+    }
+
+    public void setLeaveOnPerson(int leaveOnPerson) {
+        this.leaveOnPerson = leaveOnPerson;
     }
     
     
-    
-    
+
+    @Override
+    public String toString() {
+        return "Application{" + "applicationId=" + applicationId + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate + ", reason=" + reason + ", status=" + status + ", createdBy=" + createdBy + ", processedBy=" + processedBy + ", note=" + note + ", leaveOnPerson=" + leaveOnPerson + '}';
+    }
+
+   
 
 }

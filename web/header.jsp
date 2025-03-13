@@ -113,7 +113,7 @@
     <div class="nav-container">
         <div class="nav-left">
             <a href="index" class="logo-link" style="text-decoration: none;">
-                <h1>EMS</h1>
+                <h1>Home</h1>
             </a>
             <!--                        <a href="manage-employees.html"><i class="fas fa-users"></i> Employees</a>-->
         </div>

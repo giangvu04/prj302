@@ -5,6 +5,10 @@
 
 package model;
 
+import dal.DepartmentDAO;
+import dal.EmployeeDAO;
+import dal.EmployeeRoleDAO;
+import dal.RoleDAO;
 import java.lang.*;
 import java.sql.Date;
 /**
@@ -126,7 +130,8 @@ public class Employee {
     }
 
     public String getDepartmentName() {
-        return departmentName;
+        DepartmentDAO ddao=new DepartmentDAO();
+        return ddao.getDepartmentById(departmentId).getName();
     }
 
     public void setDepartmentName(String departmentName) {
@@ -142,7 +147,9 @@ public class Employee {
     }
 
     public String getRole() {
-        return role;
+     RoleDAO rdao = new RoleDAO();
+     EmployeeRoleDAO erdao = new EmployeeRoleDAO();
+     return rdao.getRoleById(erdao.getRoleMaxByEmployeeId(employeeId).getRoleId()).getName();
     }
 
     public void setRole(String role) {

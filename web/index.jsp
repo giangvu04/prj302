@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+"?<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
             <!DOCTYPE html>
@@ -10,7 +10,7 @@
                 <title>Employee Management System</title>
                 <link rel="stylesheet" href="styles.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<!--                <style>
+                <style>
                     /* Home page specific styles */
                     .home-page .features-grid {
                         display: grid;
@@ -100,7 +100,7 @@
                             padding: 0 1rem;
                         }
                     }
-                </style>-->
+                </style>
             </head>
 
             <body>
@@ -137,13 +137,6 @@
                                     deadline.</p>
                                 <a href="viewAgenda" class="feature-btn">Access</a>
                             </div>
-<!--                            <div class="feature-card">
-                                <i class="fas fa-file-signature"></i>
-                                <h3>Resignation Request</h3>
-                                <p>Submit and manage resignation requests. Easy process for both employees and HR
-                                    department.</p>
-                                <a href="resignation" class="feature-btn">Create Request</a>
-                            </div>-->
                             <div class="feature-card">
                                 <i class="fas fa-calendar-plus"></i>
                                 <h3>Leave Request</h3>

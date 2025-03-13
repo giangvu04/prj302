@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.ApplicationDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,13 +12,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.sql.Date;
+import model.Application;
+import model.Employee;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "IndexServlet", urlPatterns = {"/index"})
-public class IndexServlet extends HttpServlet {
+@WebServlet(name = "ApplicationRequestServlet", urlPatterns = {"/applicationRequest"})
+public class ApplicationRequestServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,43 +41,51 @@ public class IndexServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet IndexServlet</title>");            
+            out.println("<title>Servlet ApplicationRequestServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet IndexServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ApplicationRequestServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("index.jsp").forward(request, response);
-        
+
+        request.getRequestDispatcher("applicationRequest.jsp").forward(request, response);
+
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        String title = request.getParameter("title");
+        String startDate_raw = request.getParameter("startDate");
+        String endDate_raw = request.getParameter("endDate");
+        String leaveOnPerson_raw = request.getParameter("leaveOnPerson");
+        String reason = request.getParameter("reason");
+
+        HttpSession session = request.getSession();
+        Employee employee = (Employee) session.getAttribute("employee");
+
+        try {
+            Date startDate = Date.valueOf(startDate_raw);
+            Date endDate = Date.valueOf(endDate_raw);
+            int leaveOnPerson = Integer.parseInt(leaveOnPerson_raw);
+
+            ApplicationDAO adao = new ApplicationDAO();
+            Application application = new Application(title, startDate, endDate, reason, "In progress", employee.getEmployeeId(),
+                     null, null, leaveOnPerson);
+            adao.insert(application);
+        } catch (NumberFormatException e) {
+            System.out.println(e);
+        }
+        
+        response.sendRedirect("index");
+
     }
 
     /**
