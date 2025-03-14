@@ -4,6 +4,7 @@
  */
 package model;
 
+import dal.EmployeeDAO;
 import java.lang.*;
 import java.io.*;
 import java.sql.Date;
@@ -28,8 +29,9 @@ public class Application {
     private String createdByName;
     private String processedByName;
     private String createByRole;
+    private String leaveOnPersonName;
 
-    public Application( String title, Date startDate, Date endDate, String reason, String status, int createdBy, Integer processedBy, String note, int leaveOnPerson) {
+    public Application(String title, Date startDate, Date endDate, String reason, String status, int createdBy, Integer processedBy, String note, int leaveOnPerson) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -41,7 +43,6 @@ public class Application {
         this.leaveOnPerson = leaveOnPerson;
     }
 
-    
     public Application() {
     }
 
@@ -118,7 +119,8 @@ public class Application {
     }
 
     public String getCreatedByName() {
-        return createdByName;
+        EmployeeDAO edao = new EmployeeDAO();
+        return edao.getByEmployeeId(createdBy).getName();
     }
 
     public void setCreatedByName(String createdByName) {
@@ -126,7 +128,12 @@ public class Application {
     }
 
     public String getProcessedByName() {
-        return processedByName;
+        EmployeeDAO edao = new EmployeeDAO();
+        if (processedBy == 0) {
+            return " ";
+        } else {
+            return edao.getByEmployeeId(processedBy).getName();
+        }
     }
 
     public void setProcessedByName(String processedByName) {
@@ -148,14 +155,15 @@ public class Application {
     public void setLeaveOnPerson(int leaveOnPerson) {
         this.leaveOnPerson = leaveOnPerson;
     }
-    
-    
+
+    public String getLeaveOnPersonName() {
+        EmployeeDAO edao = new EmployeeDAO();
+        return edao.getByEmployeeId(leaveOnPerson).getName();
+    }
 
     @Override
     public String toString() {
         return "Application{" + "applicationId=" + applicationId + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate + ", reason=" + reason + ", status=" + status + ", createdBy=" + createdBy + ", processedBy=" + processedBy + ", note=" + note + ", leaveOnPerson=" + leaveOnPerson + '}';
     }
-
-   
 
 }

@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package model;
 
 import dal.DepartmentDAO;
@@ -11,13 +10,13 @@ import dal.EmployeeRoleDAO;
 import dal.RoleDAO;
 import java.lang.*;
 import java.sql.Date;
+
 /**
  *
  * @author Vu Thi Huong Giang
  */
-
 public class Employee {
-    
+
     private int employeeId;
     private String name;
     private boolean gender;
@@ -130,7 +129,7 @@ public class Employee {
     }
 
     public String getDepartmentName() {
-        DepartmentDAO ddao=new DepartmentDAO();
+        DepartmentDAO ddao = new DepartmentDAO();
         return ddao.getDepartmentById(departmentId).getName();
     }
 
@@ -147,9 +146,9 @@ public class Employee {
     }
 
     public String getRole() {
-     RoleDAO rdao = new RoleDAO();
-     EmployeeRoleDAO erdao = new EmployeeRoleDAO();
-     return rdao.getRoleById(erdao.getRoleMaxByEmployeeId(employeeId).getRoleId()).getName();
+        RoleDAO rdao = new RoleDAO();
+        EmployeeRoleDAO erdao = new EmployeeRoleDAO();
+        return rdao.getRoleById(erdao.getRoleMaxByEmployeeId(employeeId).getRoleId()).getName();
     }
 
     public void setRole(String role) {
@@ -157,7 +156,8 @@ public class Employee {
     }
 
     public int getRoleId() {
-        return roleId;
+        EmployeeRoleDAO erdao = new EmployeeRoleDAO();
+        return erdao.getRoleMaxByEmployeeId(employeeId).getRoleId();
     }
 
     public void setRoleId(int roleId) {
@@ -168,7 +168,5 @@ public class Employee {
     public String toString() {
         return "Employee{" + "employeeId=" + employeeId + ", name=" + name + ", gender=" + gender + ", phoneNumber=" + phoneNumber + ", address=" + address + ", departmentId=" + departmentId + ", managerId=" + managerId + ", email=" + email + ", password=" + password + ", startWorkDate=" + startWorkDate + '}';
     }
-    
 
-    
 }
