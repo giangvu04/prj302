@@ -140,7 +140,7 @@
                                 <c:forEach var="app" items="${applications}">
                                     <tr>
                                         <td>
-                                            <a href="applicationDetail?applicationId=${app.applicationId}">${app.title}</a>
+                                            <a href="applicationDetail?applicationId=${app.applicationId}">${app.title} </a>
                                         </td>
                                         <td>
                                             <fmt:formatDate value="${app.startDate}" pattern="dd/MM/yyyy" />

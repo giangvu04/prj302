@@ -5,6 +5,7 @@
 package model;
 
 import dal.EmployeeDAO;
+import dal.EmployeeRoleDAO;
 import java.lang.*;
 import java.io.*;
 import java.sql.Date;
@@ -28,8 +29,21 @@ public class Application {
 
     private String createdByName;
     private String processedByName;
-    private String createByRole;
+    private String createdByRole;
     private String leaveOnPersonName;
+
+    public Application(int applicationId, String title, Date startDate, Date endDate, String reason, String status, int createdBy, Integer processedBy, String note, int leaveOnPerson) {
+        this.applicationId = applicationId;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.reason = reason;
+        this.status = status;
+        this.createdBy = createdBy;
+        this.processedBy = processedBy;
+        this.note = note;
+        this.leaveOnPerson = leaveOnPerson;
+    }
 
     public Application(String title, Date startDate, Date endDate, String reason, String status, int createdBy, Integer processedBy, String note, int leaveOnPerson) {
         this.title = title;
@@ -110,21 +124,53 @@ public class Application {
         this.processedBy = processedBy;
     }
 
-    public String getNote() {
-        return note;
-    }
+
 
     public void setNote(String note) {
         this.note = note;
     }
 
+    public void setCreatedByName(String createdByName) {
+        this.createdByName = createdByName;
+    }
+
+    public void setProcessedByName(String processedByName) {
+        this.processedByName = processedByName;
+    }
+
+    public void setCreatedByRole(String createdByRole) {
+        this.createdByRole = createdByRole;
+    }
+
+    public int getLeaveOnPerson() {
+        return leaveOnPerson;
+    }
+
+    public void setLeaveOnPerson(int leaveOnPerson) {
+        this.leaveOnPerson = leaveOnPerson;
+    }
+
+    public void setLeaveOnPersonName(String leaveOnPersonName) {
+        this.leaveOnPersonName = leaveOnPersonName;
+    }
+    
+    
+    public String getNote() {
+       return note;
+    }
     public String getCreatedByName() {
         EmployeeDAO edao = new EmployeeDAO();
         return edao.getByEmployeeId(createdBy).getName();
     }
 
-    public void setCreatedByName(String createdByName) {
-        this.createdByName = createdByName;
+    public String getCreatedByRole() {
+        EmployeeRoleDAO erdao = new EmployeeRoleDAO();
+        return erdao.getRoleMaxByEmployeeId(createdBy).getName();
+    }
+
+    public String getLeaveOnPersonName() {
+        EmployeeDAO edao = new EmployeeDAO();
+        return edao.getByEmployeeId(leaveOnPerson).getName();
     }
 
     public String getProcessedByName() {
@@ -136,34 +182,9 @@ public class Application {
         }
     }
 
-    public void setProcessedByName(String processedByName) {
-        this.processedByName = processedByName;
-    }
-
-    public String getCreateByRole() {
-        return createByRole;
-    }
-
-    public void setCreateByRole(String createByRole) {
-        this.createByRole = createByRole;
-    }
-
-    public int getLeaveOnPerson() {
-        return leaveOnPerson;
-    }
-
-    public void setLeaveOnPerson(int leaveOnPerson) {
-        this.leaveOnPerson = leaveOnPerson;
-    }
-
-    public String getLeaveOnPersonName() {
-        EmployeeDAO edao = new EmployeeDAO();
-        return edao.getByEmployeeId(leaveOnPerson).getName();
-    }
-
     @Override
     public String toString() {
-        return "Application{" + "applicationId=" + applicationId + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate + ", reason=" + reason + ", status=" + status + ", createdBy=" + createdBy + ", processedBy=" + processedBy + ", note=" + note + ", leaveOnPerson=" + leaveOnPerson + '}';
+        return "Application{" + "applicationId=" + applicationId + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate + ", reason=" + reason + ", status=" + status + ", createdBy=" + createdBy + ", processedBy=" + processedBy + ", note=" + this.getNote() + ", leaveOnPerson=" + leaveOnPerson + ", createdByName=" + this.getCreatedByName() + ", processedByName=" + this.getProcessedByName() + ", createdByRole=" + this.getCreatedByRole() + ", leaveOnPersonName=" + this.getLeaveOnPersonName() + '}';
     }
 
 }

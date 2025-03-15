@@ -29,6 +29,7 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Application app = new Application(
+                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -54,7 +55,8 @@ public class ApplicationDAO extends DBContext {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return new Application(
+                Application app = new Application(
+                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -65,9 +67,12 @@ public class ApplicationDAO extends DBContext {
                         rs.getString("note"),
                         rs.getInt("leave_on_person")
                 );
+                
+                
+                return app;
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("getById error: " + e.getMessage());
         }
         return null;
     }
@@ -138,6 +143,7 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Application app = new Application(
+                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -167,6 +173,7 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Application app = new Application(
+                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -206,6 +213,7 @@ public class ApplicationDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Application app = new Application(
+                        rs.getInt("application_id"),
                         rs.getString("title"),
                         rs.getDate("start_date"),
                         rs.getDate("end_date"),
@@ -304,7 +312,7 @@ public class ApplicationDAO extends DBContext {
     public static void main(String[] args) {
         ApplicationDAO adao = new ApplicationDAO();
         EmployeeDAO edao = new EmployeeDAO();
-       
+
         List<Application> applications = adao.getAll();
         for (Application application : applications) {
             System.out.println(application);
