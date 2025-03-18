@@ -288,10 +288,39 @@ public class EmployeeDAO extends DBContext {
         }
         return list;
     }
+    
+    public List<Employee> getEmloyeesForTeamLeader(Employee employee) {
+        List<Employee> list = new ArrayList<>();
+        String sql = "select * from Employee where manager_id = ? or employee_id = ? ;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, employee.getEmployeeId());
+            st.setInt(2, employee.getEmployeeId());
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Employee e = new Employee(
+                        rs.getInt("employee_id"),
+                        rs.getString("name"),
+                        rs.getString("gender").equals("Male"),
+                        rs.getInt("phone_number"),
+                        rs.getString("address"),
+                        rs.getInt("department_id"),
+                        rs.getInt("manager_id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getDate("start_workDate")
+                );
+                list.add(e);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 
     public static void main(String[] args) {
         EmployeeDAO aO = new EmployeeDAO();
-        List<Employee> employees = aO.getEmloyeesForDivisionLeader(aO.getByEmployeeId(2));
+        List<Employee> employees = aO.getEmloyeesForTeamLeader(aO.getByEmployeeId(5));
         for (Employee employee : employees) {
             System.out.println(employee);
         }
