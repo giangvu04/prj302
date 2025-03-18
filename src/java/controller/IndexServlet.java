@@ -11,6 +11,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Employee;
 
 /**
  *
@@ -36,7 +38,7 @@ public class IndexServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet IndexServlet</title>");            
+            out.println("<title>Servlet IndexServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet IndexServlet at " + request.getContextPath() + "</h1>");
@@ -57,8 +59,17 @@ public class IndexServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("index.jsp").forward(request, response);
-        
+
+//        HttpSession session = request.getSession();
+//        Employee employee = (Employee) session.getAttribute("employee");
+//
+//        if (employee == null) { // chưa login 
+//            request.getRequestDispatcher("login.jsp").forward(request, response);
+//        } else {
+
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+
+//        }
     }
 
     /**

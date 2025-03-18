@@ -62,19 +62,27 @@ public class ApplicationDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String applicationId_raw = request.getParameter("applicationId");
-        
-        try {
-            int applicationId = Integer.parseInt(applicationId_raw);
-            ApplicationDAO adao = new ApplicationDAO();
-            Application application = adao.getById(applicationId);                   
-            request.setAttribute("application", application);
-            
-        } catch (NumberFormatException e) {
-            System.out.println(e);
-        } 
-        
-        request.getRequestDispatcher("applicationDetail.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        Employee employee = (Employee) session.getAttribute("employee");
+
+        if (employee == null) { // chưa login 
+            response.sendRedirect("login");
+        } else {
+
+            String applicationId_raw = request.getParameter("applicationId");
+
+            try {
+                int applicationId = Integer.parseInt(applicationId_raw);
+                ApplicationDAO adao = new ApplicationDAO();
+                Application application = adao.getById(applicationId);
+                request.setAttribute("application", application);
+
+            } catch (NumberFormatException e) {
+                System.out.println(e);
+            }
+
+            request.getRequestDispatcher("applicationDetail.jsp").forward(request, response);
+        }
     }
 
     @Override
@@ -101,7 +109,7 @@ public class ApplicationDetailServlet extends HttpServlet {
         } catch (Exception e) {
             request.setAttribute("error", "An error occurred while processing the application");
         }
-        
+
         response.sendRedirect("applicationDetail?applicationId=" + applicationId_raw);
     }
 

@@ -54,14 +54,23 @@ public class ApplicationRequestServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+         HttpSession session = request.getSession();
+        Employee employee = (Employee) session.getAttribute("employee");
+        
+        if(employee == null){ // chưa login 
+            response.sendRedirect("login");
+        }else { 
+        
         request.getRequestDispatcher("applicationRequest.jsp").forward(request, response);
-
+        }
+        
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+ 
+        
         String title = request.getParameter("title");
         String startDate_raw = request.getParameter("startDate");
         String endDate_raw = request.getParameter("endDate");

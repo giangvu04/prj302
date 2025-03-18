@@ -4,23 +4,22 @@
  */
 package controller;
 
-import dal.ApplicationDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import model.Application;
 import model.Employee;
 
 /**
  *
  * @author Admin
  */
-public class ViewApplicationsServlet extends HttpServlet {
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
+public class LogoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,47 +38,36 @@ public class ViewApplicationsServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewApplicationsServlet</title>");            
+            out.println("<title>Servlet LogoutServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewApplicationsServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet LogoutServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        
+
         HttpSession session = request.getSession();
         Employee employee = (Employee) session.getAttribute("employee");
-        
-        if(employee == null){ // chưa login 
-            response.sendRedirect("login");
-        }else {  // đã login 
-        ApplicationDAO adao = new ApplicationDAO();
-        List<Application> applications ;
-        if(employee.getRoleId() == 1 ){ // giam doc
-           applications = adao.getAll();
-        } else if (employee.getRoleId() == 2) { // truong phong
-            applications = adao.findApplicationsForDivisionLeader(employee);
-        } else if (employee.getRoleId()== 3){  //truong nhom
-            applications = adao.findApplicationsForTeamLeader(employee);
-            
-        }else { // nhan vien
-            applications = adao.findApplicationsForEmployee(employee);
+        if (employee != null) {
+            session.removeAttribute("employee");
         }
-         request.setAttribute("applications", applications);
-        request.getRequestDispatcher("viewApplications.jsp").forward(request, response);
-        
-        
-        } 
+            response.sendRedirect("login");
     }
 
-    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

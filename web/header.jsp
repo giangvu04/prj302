@@ -117,35 +117,17 @@
             </a>
             <!--                        <a href="manage-employees.html"><i class="fas fa-users"></i> Employees</a>-->
         </div>
-        <div class="nav-right">
-            <a href="login" class="login-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <div class="nav-right"> 
+            <c:if test="${sessionScope.employee == null}">
+                <a href="login" class="login-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </c:if>
+            <c:if test="${sessionScope.employee != null}">
+                <a href="logout" class="logout-btn" id="logoutBtn"><i
+                        class="fas fa-sign-out-alt"></i>Logout</a>
+                </c:if>
+
+
         </div>
     </div>
 </nav>
 
-<!--<script>
-// Function to check login status and update navigation
-function updateNavigation() {
-const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-const loginBtn = document.getElementById('loginBtn');
-const logoutBtn = document.getElementById('logoutBtn');
-
-if (isLoggedIn) {
-loginBtn.style.display = 'none';
-logoutBtn.style.display = 'flex';
-} else {
-loginBtn.style.display = 'flex';
-logoutBtn.style.display = 'none';
-}
-}
-
-// Handle logout
-document.getElementById('logoutBtn').addEventListener('click', function (e) {
-e.preventDefault();
-localStorage.removeItem('isLoggedIn');
-window.location.href = 'login.html';
-});
-
-// Update navigation when page loads
-document.addEventListener('DOMContentLoaded', updateNavigation);
-</script>-->
